@@ -6,6 +6,7 @@ namespace Server.Controllers
     // api/Product/ ... 로 시작 
     [ApiController]
     [Route("api/[controller]/[action]")]
+    //[Route("[action]")]
     public class ProductController : Controller
     {
 
@@ -37,13 +38,26 @@ namespace Server.Controllers
 
 
         //http://localhost:7130/api/Product/UpdateProduct
-        [HttpPost]
+         [HttpPost]
         public IActionResult UpdateProduct([FromBody] MockProduct mockProduct)
         {
             //products.Add(mockProduct);
             db.Add(mockProduct);
+            //return Ok();
             return Ok();
         }
+
+
+
+        //[HttpPost]
+        //public MockProduct UpdateProduct([FromBody] MockProduct mockProduct)
+        //{
+        //    //products.Add(mockProduct);
+        //    db.Add(mockProduct);
+        //    //return Ok();
+        //    return mockProduct;
+        //}
+
 
     }
 

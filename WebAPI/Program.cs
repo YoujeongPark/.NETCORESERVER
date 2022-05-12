@@ -2,7 +2,7 @@
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading;
-
+using System.Threading.Tasks;
 
 namespace WebAPI
 {
@@ -14,17 +14,55 @@ namespace WebAPI
             public string ProductName { get; set; }
         }
 
+        static async Task ClientConnections()
+        {
+            bool runServer = true;
+
+            while (runServer)
+            {
+                try
+                {
+                    HttpResponseMessage response = await httpClient.GetAsync("http://localhost:8000/rosy/");
+                    response.EnsureSuccessStatusCode();
+                    string responseBody = await response.Content.ReadAsStringAsync();
+                    // Above three lines can be replaced with new helper method below
+                    // string responseBody = await client.GetStringAsync(uri);
+
+                    Console.WriteLine(responseBody);
+                }
+                catch (HttpRequestException e)
+                {
+                    Console.WriteLine("\nException Caught!");
+                    Console.WriteLine("Message :{0} ", e.Message);
+                }
+
+                Thread.Sleep(5000);
+
+            }
+
+        }
+
+        static readonly HttpClient httpClient = new HttpClient();
+
         static void Main(string[] args)
         {
-            MockProduct mockProduct;
-
-
-            HttpClient httpClient = new HttpClient();
-            httpClient.BaseAddress = new Uri("https://localhost:7130/");
+            
             httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            Task clientTask = ClientConnections();
+            //clientTask.Wait();
+            clientTask.GetAwaiter().GetResult();    
+
+
+            // Server 
+            /**
+            MockProduct mockProduct;
+            httpClient.BaseAddress = new Uri("https://localhost:8000/");
+            
             while (true)
             {
-                HttpResponseMessage response = httpClient.GetAsync("api/Product/GetProductList").Result;  // Blocking call!
+                Thread.Sleep(3000);
+                //HttpResponseMessage response = httpClient.GetAsync("api/Product/GetProductList").Result;  // Blocking call!
+                HttpResponseMessage response = httpClient.GetAsync("api/Product/GetProductList").Result;
                 if (response.IsSuccessStatusCode)
                 {
                     var result = response.Content.ReadAsStringAsync().Result;
@@ -56,6 +94,7 @@ namespace WebAPI
                 Thread.Sleep(5000);
 
             }
+            **/
 
 
 

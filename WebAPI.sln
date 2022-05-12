@@ -5,7 +5,9 @@ VisualStudioVersion = 17.1.32421.90
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Client", "WebAPI\Client.csproj", "{99C3AF4C-9C7E-4E69-AB3D-5F86437400F6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Server", "Server\Server.csproj", "{2BB797DD-96C7-4A70-9DBD-3FD4F624ACCC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Server", "Server\Server.csproj", "{2BB797DD-96C7-4A70-9DBD-3FD4F624ACCC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleServer", "ConsoleServer\ConsoleServer.csproj", "{592C31CC-AD9D-49FA-94B5-20792EECFA60}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{2BB797DD-96C7-4A70-9DBD-3FD4F624ACCC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2BB797DD-96C7-4A70-9DBD-3FD4F624ACCC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2BB797DD-96C7-4A70-9DBD-3FD4F624ACCC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{592C31CC-AD9D-49FA-94B5-20792EECFA60}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{592C31CC-AD9D-49FA-94B5-20792EECFA60}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{592C31CC-AD9D-49FA-94B5-20792EECFA60}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{592C31CC-AD9D-49FA-94B5-20792EECFA60}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

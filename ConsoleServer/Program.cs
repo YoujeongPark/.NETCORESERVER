@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Net;
+using Newtonsoft.Json.Linq;
+using System.IO;
 
 namespace ConsoleServer
 {
@@ -49,10 +51,36 @@ namespace ConsoleServer
                 Console.WriteLine(req.Url.AbsoluteUri);
                 Console.WriteLine(req.Url.Port);
                 Console.WriteLine(req.Url.AbsolutePath);
-                Console.WriteLine();                
+                Console.WriteLine();
 
-                byte[] data = Encoding.UTF8.GetBytes("Success");
-                await resp.OutputStream.WriteAsync(data, 0, data.Length);
+                string absoultePath = req.Url.AbsolutePath;
+                switch (absoultePath)
+                {
+                    case "/reqestDate/":
+                        var json = new JObject();
+                        json.Add("CurrentTime", DateTime.Now.ToString());
+                        byte[] data = Encoding.UTF8.GetBytes(json.ToString()); //현재시간 응답
+                        await resp.OutputStream.WriteAsync(data, 0, data.Length);
+                        break;
+                    case "/postFolderFiles/":
+                        var body = new StreamReader(ctx.Request.InputStream).ReadToEnd();
+                        Console.WriteLine(body);
+
+                        // 성공 Signal 보내기 
+                        byte[] data2 = Encoding.UTF8.GetBytes("Success");
+                        ctx.Response.StatusCode = 200;
+                        ctx.Response.KeepAlive = false;
+                        ctx.Response.ContentLength64 = data2.Length;
+                        await resp.OutputStream.WriteAsync(data2, 0, data2.Length);
+                        break; 
+                    default:
+                        Console.WriteLine("다시 재 선택 하시오. ");
+                        break;
+
+
+                }
+
+                
                 resp.Close();
 
             }

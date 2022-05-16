@@ -72,7 +72,18 @@ namespace ConsoleServer
                         ctx.Response.KeepAlive = false;
                         ctx.Response.ContentLength64 = data2.Length;
                         await resp.OutputStream.WriteAsync(data2, 0, data2.Length);
-                        break; 
+                        break;
+                    case "/postTxtFile/":
+                        //그대로 Txt 파일 받아오기 
+                        var body2 = new StreamReader(ctx.Request.InputStream).ReadToEnd();
+                        FileStream fileOut = new FileStream("d:\\file.txt", FileMode.Create, FileAccess.Write);
+                        StreamWriter sw = new StreamWriter(fileOut);
+                        sw.Write(body2);
+                        sw.Close();
+                        fileOut.Close();
+
+                        await resp.OutputStream.WriteAsync(Encoding.UTF8.GetBytes("Success"), 0, Encoding.UTF8.GetBytes("Success").Length);
+                        break;
                     default:
                         Console.WriteLine("다시 재 선택 하시오. ");
                         break;

@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections;
+using System.IO;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
@@ -23,32 +25,45 @@ namespace WebAPI
         {
             bool runServer = true;
             HttpResponseMessage response;
-            string resourcePath;
+            //string resourcePath;
             string responseBody;
+
+            ArrayList resourcePath = new ArrayList();
+            resourcePath.Add("reqestDate/");
+            resourcePath.Add("postFolderFiles/");
+            resourcePath.Add("postTxtFile/");
+            resourcePath.Add("excuteExeFile/");
 
             while (runServer)
             {
                 Console.WriteLine("해당 작업을 선택하시오");
-                Console.WriteLine("1. 현재 시간 받아오기 " +
-                                  "2. 파일 목록 json으로 보내기 " +
-                                  "3. Txt 파일 전송해서 Server에 자동으로 다운로드 ");
-                string inputNumber = Console.ReadLine();
+                Console.WriteLine("1. 현재 시간 받아오기 \n" +
+                                  "2. 파일 목록 json으로 보내기 \n" +
+                                  "3. Txt 파일 전송해서 Server에 자동으로 다운로드 \n" +
+                                  "4. 외부파일 실행  \n"
+                                  );
 
+
+                int inputNumber = Int32.Parse(Console.ReadLine());
 
                 switch (inputNumber)
                 {
-                    case "1":
-                        resourcePath = "reqestDate/";
-                        response = await httpClient.GetAsync("http://localhost:8000/" + resourcePath);
+                    case 1:
+                        //resourcePath = "reqestDate/";
+                        response = await httpClient.GetAsync("http://localhost:8000/" + resourcePath[inputNumber-1]);
                         response.EnsureSuccessStatusCode(); // Exception을 주기 때문에 필수 
 
                         responseBody = await response.Content.ReadAsStringAsync();
                         Console.WriteLine(responseBody);
                         break;
-                    case "2":
+
+                    case 2:
+                        // 폴더 위치 입력
                         Console.WriteLine("폴더 위치를 입력 하시오. ");
-                        string folderAddress = Console.ReadLine();
-                        System.IO.DirectoryInfo directoryInfo = new System.IO.DirectoryInfo(folderAddress);
+                        string folderAddress_2 = Console.ReadLine();
+                        System.IO.DirectoryInfo directoryInfo = new System.IO.DirectoryInfo(folderAddress_2);
+                        
+                        //파일 목록 Json 형태로 변경 
                         JObject jobject = new JObject();
                         jobject.Add("Folder", directoryInfo.Name);
 
@@ -61,20 +76,57 @@ namespace WebAPI
 
                         // Json to HttpContent
                         var stringPayload = JsonConvert.SerializeObject(jobject);
-                        var jsonHttpContent = new StringContent(stringPayload, Encoding.UTF8, "application/json");
+                        var jsonHttpContent = new StringContent(stringPayload, Encoding.UTF8, "application/json"); // Json 파일로 전송 
 
-                        //Connection 
-                        resourcePath = "postFolderFiles/";
-                        response = await httpClient.PostAsync("http://localhost:8000/" + resourcePath, jsonHttpContent);
+
+                        /** Connection **/  
+                        //resourcePath = "postFolderFiles/";
+                        response = await httpClient.PostAsync("http://localhost:8000/" + resourcePath[inputNumber - 1], jsonHttpContent);
                         response.EnsureSuccessStatusCode(); // Exception을 주기 때문에 필수 
 
                         responseBody = await response.Content.ReadAsStringAsync();
                         Console.WriteLine(responseBody);
 
                         break;
-                    case "3":
-                        Console.WriteLine("3번을 선택하셨습니다.");
+                    case 3:
+                        Console.WriteLine("폴더 위치를 입력 하시오. ");
+                        string folderAddress_3 = Console.ReadLine();
+                        Console.WriteLine("txt 파일 명을 입력하시오. ");
+                        string fileName_3 = Console.ReadLine();
+
+
+                        //파일 한번 읽기
+                        string line;
+                        StreamReader file = new StreamReader(folderAddress_3 + "\\" + fileName_3);
+                        while ((line = file.ReadLine()) != null)
+                        {
+                            Console.WriteLine(line);
+                        }
+
+                        file.Close(); // 스트림 닫기 
+
+                        //파일 보내기 
+
+                        ///파일
+                        var fileContent = new ByteArrayContent(File.ReadAllBytes(folderAddress_3 + "\\" + fileName_3));
+
+                        // 파일 존재 유무 확인 
+                        //if (!File.Exists(folderAddress_3 + "\\" + fileName_3))
+                        //{
+                            response = await httpClient.PostAsync("http://localhost:8000/" + resourcePath[inputNumber - 1], fileContent);
+                            response.EnsureSuccessStatusCode(); // Exception을 주기 때문에 필수 
+                            responseBody = await response.Content.ReadAsStringAsync();
+                            Console.WriteLine(responseBody);
+
+                        //}
+
                         break;
+                    case 4:
+                        
+                                               
+                        
+                        break;
+
                     default:
                         Console.WriteLine("다시 재 선택 하시오. ");
                         break;

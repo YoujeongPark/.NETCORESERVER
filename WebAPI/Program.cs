@@ -20,6 +20,7 @@ namespace WebAPI
         }
 
         static readonly HttpClient httpClient = new HttpClient();
+ 
 
         static async Task ClientConnections()
         {
@@ -40,7 +41,13 @@ namespace WebAPI
                 Console.WriteLine("1. 현재 시간 받아오기 \n" +
                                   "2. 파일 목록 json으로 보내기 \n" +
                                   "3. Txt 파일 전송해서 Server에 자동으로 다운로드 \n" +
-                                  "4. 외부파일 실행  \n"
+                                  "4. 이미지 파일 전송해서 Server에 자동으로 다운로드 \n" + 
+                                  
+                                  
+                                  "x. 외부파일 실행  \n" +
+                                  "------------------------\n" +
+                                  "11. Thread 실행  \n" +
+                                  "12. Thread 실행  \n" 
                                   );
 
 
@@ -60,7 +67,7 @@ namespace WebAPI
                     case 2:
                         // 폴더 위치 입력
                         Console.WriteLine("폴더 위치를 입력 하시오. ");
-                        string folderAddress_2 = Console.ReadLine();
+                                                                              string folderAddress_2 = Console.ReadLine();
                         System.IO.DirectoryInfo directoryInfo = new System.IO.DirectoryInfo(folderAddress_2);
                         
                         //파일 목록 Json 형태로 변경 
@@ -71,7 +78,7 @@ namespace WebAPI
                         foreach(System.IO.FileInfo File in directoryInfo.GetFiles()) { 
                             jArray.Add(File.FullName); 
                         }
-                        jobject.Add("Files", jArray);
+                        jobject.Add("Files", jArray);                                                                                                                                                                                                            
                         Console.WriteLine(jobject);
 
                         // Json to HttpContent
@@ -88,6 +95,7 @@ namespace WebAPI
                         Console.WriteLine(responseBody);
 
                         break;
+
                     case 3:
                         Console.WriteLine("폴더 위치를 입력 하시오. ");
                         string folderAddress_3 = Console.ReadLine();
@@ -109,7 +117,7 @@ namespace WebAPI
 
                         ///파일
                         var fileContent = new ByteArrayContent(File.ReadAllBytes(folderAddress_3 + "\\" + fileName_3));
-
+                        
                         // 파일 존재 유무 확인 
                         //if (!File.Exists(folderAddress_3 + "\\" + fileName_3))
                         //{
@@ -121,12 +129,27 @@ namespace WebAPI
                         //}
 
                         break;
-                    case 4:
-                        
-                                               
-                        
-                        break;
 
+                    // 이미지 파일 전송하기  ref https://makolyte.com/csharp-how-to-send-a-file-with-httpclient/
+                    case 4:
+                        var multipartFormContent = new MultipartFormDataContent();
+                        multipartFormContent.Add(new StringContent("123"), name: "UserId");
+                        multipartFormContent.Add(new StringContent("Home insurance"), name: "Title");
+
+                        //Add the file
+                        var fileStreamContent = new StreamContent(File.OpenRead("D:\\"));
+                        fileStreamContent.Headers.ContentType = new MediaTypeHeaderValue("image/png");
+                        multipartFormContent.Add(fileStreamContent, name: "file", fileName: "house.png");
+
+
+                        var response4 = await httpClient.PostAsync("https://localhost:8000/files/", multipartFormContent);
+                        response4.EnsureSuccessStatusCode();
+                        var responseBody4 = await response4.Content.ReadAsStringAsync();
+                        Console.WriteLine(responseBody4);
+                        break;
+                    case 5:
+
+                        break;
                     default:
                         Console.WriteLine("다시 재 선택 하시오. ");
                         break;

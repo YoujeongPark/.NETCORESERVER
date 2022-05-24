@@ -51,7 +51,18 @@ namespace ConsoleServer
                 Console.WriteLine(req.Url.AbsoluteUri);
                 Console.WriteLine(req.Url.Port);
                 Console.WriteLine(req.Url.AbsolutePath);
-                Console.WriteLine();
+                Console.WriteLine(req.UserHostAddress);
+                Console.WriteLine(req.Headers); // [::1]:8000
+                Console.WriteLine(req.ServiceName); // [::1]:8000
+                Console.WriteLine(req.Headers);
+
+                // get Client IP 
+                string clientIP = ctx.Request.RemoteEndPoint.ToString();
+                Console.WriteLine(clientIP);
+
+                //get User Host Address 
+                Console.WriteLine(req.UserHostAddress);
+
 
                 string absoultePath = req.Url.AbsolutePath;
                 switch (absoultePath)

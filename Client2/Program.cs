@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-namespace WebAPI
+namespace Client2
 {
     internal class Program
     {
@@ -40,7 +40,7 @@ namespace WebAPI
                 Console.WriteLine("1. 현재 시간 받아오기 \n" +
                                   "2. 파일 목록 json으로 보내기 \n" +
                                   "3. Txt 파일 전송해서 Server에 자동으로 다운로드 \n" +
-                                  "4. 이미지 파일 전송해서 Server에 자동으로 다운로드 \n" + 
+                                  "4. 이미지 파일 전송해서 Server에 자동으로 다운로드 \n" +
                                   "x. 외부파일 실행  \n" +
                                   "------------------------\n"
                                   );
@@ -52,7 +52,7 @@ namespace WebAPI
                 {
                     case 1:
                         //resourcePath = "reqestDate/";
-                        response = await httpClient.GetAsync("http://localhost:8000/" + resourcePath[inputNumber-1]);
+                        response = await httpClient.GetAsync("http://localhost:8000/" + resourcePath[inputNumber - 1]);
                         response.EnsureSuccessStatusCode(); // Exception을 주기 때문에 필수 
 
                         responseBody = await response.Content.ReadAsStringAsync();
@@ -62,18 +62,19 @@ namespace WebAPI
                     case 2:
                         // 폴더 위치 입력
                         Console.WriteLine("폴더 위치를 입력 하시오. ");
-                                                                              string folderAddress_2 = Console.ReadLine();
+                        string folderAddress_2 = Console.ReadLine();
                         System.IO.DirectoryInfo directoryInfo = new System.IO.DirectoryInfo(folderAddress_2);
-                        
+
                         //파일 목록 Json 형태로 변경 
                         JObject jobject = new JObject();
                         jobject.Add("Folder", directoryInfo.Name);
 
-                        JArray jArray = new JArray(); 
-                        foreach(System.IO.FileInfo File in directoryInfo.GetFiles()) { 
-                            jArray.Add(File.FullName); 
+                        JArray jArray = new JArray();
+                        foreach (System.IO.FileInfo File in directoryInfo.GetFiles())
+                        {
+                            jArray.Add(File.FullName);
                         }
-                        jobject.Add("Files", jArray);                                                                                                                                                                                                            
+                        jobject.Add("Files", jArray);
                         Console.WriteLine(jobject);
 
                         // Json to HttpContent
@@ -81,7 +82,7 @@ namespace WebAPI
                         var jsonHttpContent = new StringContent(stringPayload, Encoding.UTF8, "application/json"); // Json 파일로 전송 
 
 
-                        /** Connection **/  
+                        /** Connection **/
                         //resourcePath = "postFolderFiles/";
                         response = await httpClient.PostAsync("http://localhost:8000/" + resourcePath[inputNumber - 1], jsonHttpContent);
                         response.EnsureSuccessStatusCode(); // Exception을 주기 때문에 필수 
@@ -112,14 +113,14 @@ namespace WebAPI
 
                         ///파일
                         var fileContent = new ByteArrayContent(File.ReadAllBytes(folderAddress_3 + "\\" + fileName_3));
-                        
+
                         // 파일 존재 유무 확인 
                         //if (!File.Exists(folderAddress_3 + "\\" + fileName_3))
                         //{
-                            response = await httpClient.PostAsync("http://localhost:8000/" + resourcePath[inputNumber - 1], fileContent);
-                            response.EnsureSuccessStatusCode(); // Exception을 주기 때문에 필수 
-                            responseBody = await response.Content.ReadAsStringAsync();
-                            Console.WriteLine(responseBody);
+                        response = await httpClient.PostAsync("http://localhost:8000/" + resourcePath[inputNumber - 1], fileContent);
+                        response.EnsureSuccessStatusCode(); // Exception을 주기 때문에 필수 
+                        responseBody = await response.Content.ReadAsStringAsync();
+                        Console.WriteLine(responseBody);
 
                         //}
 
@@ -145,7 +146,7 @@ namespace WebAPI
                     case 5:
 
                         break;
-                   
+
                     default:
                         Console.WriteLine("다시 재 선택 하시오. ");
                         break;
@@ -187,7 +188,7 @@ namespace WebAPI
             httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             Task clientTask = ClientConnections();
             //clientTask.Wait();
-            clientTask.GetAwaiter().GetResult();    
+            clientTask.GetAwaiter().GetResult();
 
 
             // Server 

@@ -56,6 +56,15 @@ namespace ConsoleServer
                 Console.WriteLine(req.ServiceName); // [::1]:8000
                 Console.WriteLine(req.Headers);
 
+                Console.WriteLine("KeepAlive: {0}", req.KeepAlive);
+                Console.WriteLine("Local end point: {0}", req.LocalEndPoint.ToString());
+                Console.WriteLine("Remote end point: {0}", req.RemoteEndPoint.ToString());
+                Console.WriteLine("Is local? {0}", req.IsLocal);
+                Console.WriteLine("HTTP method: {0}", req.HttpMethod);
+                Console.WriteLine("Protocol version: {0}", req.ProtocolVersion);
+                Console.WriteLine("Is authenticated: {0}", req.IsAuthenticated);
+                Console.WriteLine("Is secure: {0}", req.IsSecureConnection);
+
                 // get Client IP 
                 string clientIP = ctx.Request.RemoteEndPoint.ToString();
                 Console.WriteLine(clientIP);

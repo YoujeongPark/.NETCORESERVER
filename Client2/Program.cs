@@ -52,7 +52,7 @@ namespace Client2
                 {
                     case 1:
                         //resourcePath = "reqestDate/";
-                        response = await httpClient.GetAsync("http://localhost:8000/" + resourcePath[inputNumber - 1]);
+                        response = await httpClient.GetAsync("http://localhost:7000/" + resourcePath[inputNumber - 1]);
                         response.EnsureSuccessStatusCode(); // Exception을 주기 때문에 필수 
 
                         responseBody = await response.Content.ReadAsStringAsync();
@@ -84,7 +84,7 @@ namespace Client2
 
                         /** Connection **/
                         //resourcePath = "postFolderFiles/";
-                        response = await httpClient.PostAsync("http://localhost:8000/" + resourcePath[inputNumber - 1], jsonHttpContent);
+                        response = await httpClient.PostAsync("http://localhost:7000/" + resourcePath[inputNumber - 1], jsonHttpContent);
                         response.EnsureSuccessStatusCode(); // Exception을 주기 때문에 필수 
 
                         responseBody = await response.Content.ReadAsStringAsync();
@@ -117,7 +117,7 @@ namespace Client2
                         // 파일 존재 유무 확인 
                         //if (!File.Exists(folderAddress_3 + "\\" + fileName_3))
                         //{
-                        response = await httpClient.PostAsync("http://localhost:8000/" + resourcePath[inputNumber - 1], fileContent);
+                        response = await httpClient.PostAsync("http://localhost:7000/" + resourcePath[inputNumber - 1], fileContent);
                         response.EnsureSuccessStatusCode(); // Exception을 주기 때문에 필수 
                         responseBody = await response.Content.ReadAsStringAsync();
                         Console.WriteLine(responseBody);
@@ -138,7 +138,7 @@ namespace Client2
                         multipartFormContent.Add(fileStreamContent, name: "file", fileName: "house.png");
 
 
-                        var response4 = await httpClient.PostAsync("https://localhost:8000/files/", multipartFormContent);
+                        var response4 = await httpClient.PostAsync("https://localhost:7000/files/", multipartFormContent);
                         response4.EnsureSuccessStatusCode();
                         var responseBody4 = await response4.Content.ReadAsStringAsync();
                         Console.WriteLine(responseBody4);
@@ -159,7 +159,7 @@ namespace Client2
 
                 //try
                 //{
-                //    HttpResponseMessage response = await httpClient.GetAsync("http://localhost:8000/rosy/");
+                //    HttpResponseMessage response = await httpClient.GetAsync("http://localhost:7000/rosy/");
                 //    response.EnsureSuccessStatusCode();
                 //    string responseBody = await response.Content.ReadAsStringAsync();
                 //    // Above three lines can be replaced with new helper method below

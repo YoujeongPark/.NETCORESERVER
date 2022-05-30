@@ -52,7 +52,7 @@ namespace WebAPI
                 {
                     case 1:
                         //resourcePath = "reqestDate/";
-                        response = await httpClient.GetAsync("http://localhost:8000/" + resourcePath[inputNumber-1]);
+                        response = await httpClient.GetAsync("http://localhost:7000/" + resourcePath[inputNumber-1]);
                         response.EnsureSuccessStatusCode(); // Exception을 주기 때문에 필수 
 
                         responseBody = await response.Content.ReadAsStringAsync();
@@ -62,7 +62,7 @@ namespace WebAPI
                     case 2:
                         // 폴더 위치 입력
                         Console.WriteLine("폴더 위치를 입력 하시오. ");
-                                                                              string folderAddress_2 = Console.ReadLine();
+                        string folderAddress_2 = Console.ReadLine();
                         System.IO.DirectoryInfo directoryInfo = new System.IO.DirectoryInfo(folderAddress_2);
                         
                         //파일 목록 Json 형태로 변경 
@@ -83,7 +83,7 @@ namespace WebAPI
 
                         /** Connection **/  
                         //resourcePath = "postFolderFiles/";
-                        response = await httpClient.PostAsync("http://localhost:8000/" + resourcePath[inputNumber - 1], jsonHttpContent);
+                        response = await httpClient.PostAsync("http://localhost:7000/" + resourcePath[inputNumber - 1], jsonHttpContent);
                         response.EnsureSuccessStatusCode(); // Exception을 주기 때문에 필수 
 
                         responseBody = await response.Content.ReadAsStringAsync();
@@ -116,7 +116,7 @@ namespace WebAPI
                         // 파일 존재 유무 확인 
                         //if (!File.Exists(folderAddress_3 + "\\" + fileName_3))
                         //{
-                            response = await httpClient.PostAsync("http://localhost:8000/" + resourcePath[inputNumber - 1], fileContent);
+                            response = await httpClient.PostAsync("http://localhost:7000/" + resourcePath[inputNumber - 1], fileContent);
                             response.EnsureSuccessStatusCode(); // Exception을 주기 때문에 필수 
                             responseBody = await response.Content.ReadAsStringAsync();
                             Console.WriteLine(responseBody);
@@ -137,7 +137,7 @@ namespace WebAPI
                         multipartFormContent.Add(fileStreamContent, name: "file", fileName: "house.png");
 
 
-                        var response4 = await httpClient.PostAsync("https://localhost:8000/files/", multipartFormContent);
+                        var response4 = await httpClient.PostAsync("https://localhost:7000/files/", multipartFormContent);
                         response4.EnsureSuccessStatusCode();
                         var responseBody4 = await response4.Content.ReadAsStringAsync();
                         Console.WriteLine(responseBody4);
@@ -185,10 +185,11 @@ namespace WebAPI
         {
             // Console Server Connection 
             httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            httpClient.BaseAddress = new Uri("https://localhost:8001/");
             Task clientTask = ClientConnections();
             //clientTask.Wait();
-            clientTask.GetAwaiter().GetResult();    
-
+            clientTask.GetAwaiter().GetResult();
+            
 
             // Server 
             /**

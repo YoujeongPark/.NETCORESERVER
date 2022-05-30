@@ -12,14 +12,14 @@ namespace ConsoleServer
     internal class Program
     {
         public static HttpListener listener;
-        //public static string url = "http://localhost:8000/";
+        //public static string url = "http://localhost:7000/";
         public static int pageViews = 0;
         public static int requestCount = 0;
 
         static void Main(string[] args)
         {
             listener = new HttpListener();
-            listener.Prefixes.Add("http://localhost:8000/");
+            listener.Prefixes.Add("http://localhost:7000/");
             //listener.Prefixes.Add("http://localhost:8000/rosy/");
             listener.Start();
             Console.WriteLine("Listening for connections");
